@@ -1,0 +1,34 @@
+import React, { SetStateAction } from 'react';
+
+import './Input.css';
+
+const Input = ({
+  setMessage,
+  sendMessage,
+  message
+}: {
+  setMessage: React.Dispatch<SetStateAction<string>>;
+  sendMessage: (event: { preventDefault: Function }) => void;
+  message: string;
+}) => (
+  <form className="form">
+    <input
+      className="input"
+      type="text"
+      placeholder="Type a message..."
+      value={message}
+      onChange={({ target: { value } }) => setMessage(value)}
+      onKeyPress={({ key, preventDefault }) =>
+        key === 'Enter' ? sendMessage({ preventDefault }) : null
+      }
+    />
+    <button
+      className="sendButton"
+      onClick={({ preventDefault }) => sendMessage({ preventDefault })}
+    >
+      Send
+    </button>
+  </form>
+);
+
+export default Input;

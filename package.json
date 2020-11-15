@@ -1,0 +1,31 @@
+{
+  "name": "random-chat-websocket-typescript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lukats/random-chat-websocket-typescript.git",
+  "author": "lukats <tsiaraso@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "prettier-format": "prettier --config .prettierrc './**/*.ts' --write"
+  },
+  "lint-staged": {
+    "**/*.{tsx, ts}": [
+      "yarn prettier-format",
+      "yarn lint"
+    ],
+    "**/*.css": [
+      "yarn prettier-format"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2"
+  }
+}

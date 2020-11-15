@@ -1,0 +1,6 @@
+build
+dist
+coverage
+.history
+node_modules
+.next
