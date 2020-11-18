@@ -9,7 +9,7 @@ const Messages = ({
 }: {
   messages: { text: string; user: string }[];
   name: string;
-}) => (
+}): JSX.Element => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>

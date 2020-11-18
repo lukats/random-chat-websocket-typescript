@@ -6,7 +6,7 @@ import MessagesChat from './components/messages-chat/MessagesChat';
 import { UserProvider } from './contexts/user';
 import { MessagesProvider } from './contexts/messages';
 
-function App() {
+function App(): JSX.Element {
   return (
     <BrowserRouter>
       <UserProvider>

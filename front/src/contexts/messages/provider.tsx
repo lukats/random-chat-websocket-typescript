@@ -6,11 +6,17 @@ import { MessagesContext } from './context';
 
 const initialState: MessageInterface[] = [];
 
-export const MessagesProvider: FunctionComponent = ({ children }) => {
-  const [state, reducer] = useReducer(messagesReducer, initialState);
+export const MessagesProvider: FunctionComponent = ({
+  children
+}): JSX.Element => {
+  const [state, dispatch] = useReducer(messagesReducer, initialState);
   return (
-    <MessagesContext.Provider value={{ state, reducer }}>
+    <MessagesContext.Provider value={{ state, dispatch }}>
       {children}
     </MessagesContext.Provider>
   );
+};
+
+MessagesProvider.propTypes = {
+  children: React.Children
 };

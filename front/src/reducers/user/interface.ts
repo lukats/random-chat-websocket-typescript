@@ -1,7 +1,7 @@
 export interface UserPayload {
   username?: string;
   token?: string;
-  socket?: Object | null;
+  socket?: WebSocket | null;
 }
 
 export interface UserSignPayload {
@@ -12,7 +12,7 @@ export interface UserSignPayload {
 export interface UserState {
   username: string;
   token: string;
-  socket: Object | null;
+  socket: WebSocket | null;
 }
 
 export interface ReducerAction {

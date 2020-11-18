@@ -8,9 +8,9 @@ const Input = ({
   message
 }: {
   setMessage: React.Dispatch<SetStateAction<string>>;
-  sendMessage: (event: { preventDefault: Function }) => void;
+  sendMessage: (event: { preventDefault: () => void }) => void;
   message: string;
-}) => (
+}): JSX.Element => (
   <form className="form">
     <input
       className="input"

@@ -3,7 +3,9 @@ import { MessagesContextInterface } from './interface';
 
 const contextPayload: MessagesContextInterface = {
   state: [],
-  reducer: () => {}
+  dispatch: () => {
+    return;
+  }
 };
 
 export const MessagesContext = createContext(contextPayload);

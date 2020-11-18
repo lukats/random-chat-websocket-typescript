@@ -4,7 +4,7 @@ import { signIn, signUp } from '../../reducers/user';
 import { SET_ALL } from '../../reducers/user/actionTypes';
 import './Sign.css';
 
-function Sign() {
+function Sign(): JSX.Element {
   const [pseudo, setPseudo] = useState('');
   const [age, setAge] = useState('');
   const [password1, setPassword1] = useState('');

@@ -8,7 +8,7 @@ const Message = ({
 }: {
   message: { text: string; user: string };
   name: string;
-}) => {
+}): JSX.Element => {
   let isSentByCurrentUser = false;
 
   const trimmedName = name.trim();

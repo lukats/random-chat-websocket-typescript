@@ -7,7 +7,7 @@ import './MessagesChat.css';
 import { MessagesContext } from '../../contexts/messages';
 import { UserContext } from '../../contexts/user';
 
-function MessagesChat() {
+function MessagesChat(): JSX.Element {
   const [message, setMessage] = useState('');
   const {
     state: { username }
@@ -18,7 +18,7 @@ function MessagesChat() {
     // TODO: socket listener
   }, []);
 
-  const sendMessage = (event: { preventDefault: Function }) => {
+  const sendMessage = (event: { preventDefault: () => void }) => {
     event.preventDefault();
   };
 

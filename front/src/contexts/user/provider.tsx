@@ -9,11 +9,15 @@ const initialState: UserReducerStateInterface = {
   socket: null
 };
 
-export const UserProvider: FunctionComponent = ({ children }) => {
+export const UserProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [state, dispatch] = useReducer(userReducer, initialState);
   return (
     <UserContext.Provider value={{ dispatch, state }}>
       {children}
     </UserContext.Provider>
   );
+};
+
+UserProvider.propTypes = {
+  children: React.Children
 };

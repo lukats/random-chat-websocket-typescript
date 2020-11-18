@@ -3,7 +3,7 @@ import { ReducerAction, UserPayload, SignAction } from '../interface';
 import { decode } from 'jsonwebtoken';
 
 export const signUp = (dispatch: Dispatch<ReducerAction>) => {
-  return async (action: SignAction) => {
+  return async (action: SignAction): Promise<void> => {
     try {
       const res = await fetch(
         `${process.env.REACT_APP_BACKEND_HTTP_URL}/signup`,
@@ -28,12 +28,11 @@ export const signUp = (dispatch: Dispatch<ReducerAction>) => {
       const socket = new WebSocket(
         `${process.env.REACT_APP_BACKEND_WS_URL}/chat/${decodedToken.channel}`
       );
-      let newAction = {
+      const newAction = {
         type: action.type,
         payload: { token, username, socket }
       };
       window.location.href = '/chat';
-      console.log({ newAction });
       return dispatch(newAction);
     } catch (error) {
       return;

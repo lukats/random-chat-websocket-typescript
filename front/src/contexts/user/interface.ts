@@ -4,7 +4,7 @@ import { ReducerAction } from '../../reducers/user/interface';
 export interface UserReducerStateInterface {
   token: string;
   username: string;
-  socket: Object | null;
+  socket: WebSocket | null;
 }
 
 export interface UserContextInterface {

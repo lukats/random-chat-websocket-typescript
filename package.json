@@ -11,8 +11,14 @@
     "up:back": "cd back && yarn dev && cd ..",
     "up:front": "cd front && yarn start && cd ..",
     "start:back": "yarn up:db:containers && yarn up:back",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --fix --ext .ts,.tsx",
     "prettier-format": "prettier --config .prettierrc './**/*.ts' './**/*.tsx' --write"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "lint-staged": {
     "**/*.{tsx, ts}": [

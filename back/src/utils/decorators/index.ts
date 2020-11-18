@@ -1,1 +1,1 @@
-export * from './UserIdentifier'
+export * from './UserIdentifier';
