@@ -21,9 +21,9 @@ export const isValidTokens = async (
   try {
     verify(token, appEnv.JWT_ACCESS_SECRET);
     refreshToken = await redis.get(tokenData.ref as string);
-    if (!refreshToken) throw new Error('Something wrong');
+    if (!refreshToken) throw new Error('Something wrong BANG');
   } catch (error) {
-    if (error.message === 'Something wrong') return [false, false];
+    if (error.message === 'Something wrong BANG') return [false, false];
     areValid[0] = false;
   }
 
@@ -34,10 +34,10 @@ export const isValidTokens = async (
     ) as Record<string, unknown>;
 
     const isCorrect = await compare(token, refreshTokenData.hash as string);
-    if (!isCorrect) throw new Error('Something wrong');
+    if (!isCorrect) throw new Error('Something wrong BANG');
   } catch (error) {
     await redis.del(tokenData.ref as string);
-    if (error.message === 'Something wrong') areValid[0] = false;
+    if (error.message === 'Something wrong BANG') areValid[0] = false;
     areValid[1] = false;
     return areValid;
   }
