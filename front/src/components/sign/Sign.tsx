@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '../../contexts/user';
+import { signIn, signUp } from '../../reducers/user';
+import { SET_ALL } from '../../reducers/user/actionTypes';
 import './Sign.css';
 
 function Sign() {
@@ -6,46 +9,61 @@ function Sign() {
   const [age, setAge] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-  const [signIn, setSignIn] = useState(true);
+  const [signInMode, setSignInMode] = useState(true);
   const [inputNotFilled, setInputNotFilled] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [ageLimit, setAgeLimit] = useState(false);
+  const { dispatch } = useContext(UserContext);
+
+  const registerUser = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (pseudo === '' || password1 === '' || password2 === '' || age === '') {
+      setInputNotFilled(true);
+      event.preventDefault();
+      return;
+    }
+    if (password1 !== password2 && password1 !== '') {
+      setErrorPassword(true);
+      event.preventDefault();
+      return;
+    }
+    if (parseInt(age) < 18) {
+      setAgeLimit(true);
+      event.preventDefault();
+      return;
+    }
+    signUp(dispatch)({
+      type: SET_ALL,
+      payload: { password: password1, username: pseudo }
+    });
+  };
 
   const sign = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (signIn) {
+    if (signInMode) {
       if (pseudo === '' || password1 === '') {
         setInputNotFilled(true);
         event.preventDefault();
         return;
       }
+      signIn(dispatch)({
+        type: SET_ALL,
+        payload: { password: password1, username: pseudo }
+      });
     } else {
-      if (pseudo === '' || password1 === '' || password2 === '' || age === '') {
-        setInputNotFilled(true);
-        event.preventDefault();
-        return;
-      }
-      if (password1 !== password2 && password1 !== '') {
-        setErrorPassword(true);
-        event.preventDefault();
-        return;
-      }
-      if (parseInt(age) < 18) {
-        setAgeLimit(true);
-        event.preventDefault();
-        return;
-      }
+      registerUser(event);
     }
   };
 
   const switchFunction = () => {
     setInputNotFilled(false);
-    setSignIn((prevSignIn) => !prevSignIn);
+    setSignInMode((prevSignIn) => !prevSignIn);
   };
 
   return (
     <div className="signOuterContainer">
       <div className="signInnerContainer">
-        <h1 className="heading">Sign {signIn ? 'In' : 'Up'}</h1>
+        <h1 className="heading">Sign {signInMode ? 'In' : 'Up'}</h1>
         <div>
           <input
             placeholder="Pseudo"
@@ -59,7 +77,7 @@ function Sign() {
             value={pseudo}
           />
         </div>
-        {!signIn && (
+        {!signInMode && (
           <div>
             <input
               placeholder="Age"
@@ -91,7 +109,7 @@ function Sign() {
             value={password1}
           />
         </div>
-        {!signIn && (
+        {!signInMode && (
           <div>
             <input
               placeholder="Confirm Password"
@@ -109,10 +127,10 @@ function Sign() {
           </div>
         )}
         <button className="button mt-20" onClick={sign} type="submit">
-          Sign {signIn ? 'In' : 'Up'}
+          Sign {signInMode ? 'In' : 'Up'}
         </button>
         <button className="button mt-20 switch" onClick={switchFunction}>
-          Switch to Sign {signIn ? 'Up' : 'In'}
+          Switch to Sign {signInMode ? 'Up' : 'In'}
         </button>
       </div>
     </div>

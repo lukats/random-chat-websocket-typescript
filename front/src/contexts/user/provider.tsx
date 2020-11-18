@@ -10,9 +10,9 @@ const initialState: UserReducerStateInterface = {
 };
 
 export const UserProvider: FunctionComponent = ({ children }) => {
-  const [state, reducer] = useReducer(userReducer, initialState);
+  const [state, dispatch] = useReducer(userReducer, initialState);
   return (
-    <UserContext.Provider value={{ reducer, state }}>
+    <UserContext.Provider value={{ dispatch, state }}>
       {children}
     </UserContext.Provider>
   );

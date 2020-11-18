@@ -1,3 +1,6 @@
+import { Dispatch } from 'react';
+import { ReducerAction } from '../../reducers/user/interface';
+
 export interface UserReducerStateInterface {
   token: string;
   username: string;
@@ -6,5 +9,5 @@ export interface UserReducerStateInterface {
 
 export interface UserContextInterface {
   state: UserReducerStateInterface;
-  reducer: Function;
+  dispatch: Dispatch<ReducerAction>;
 }

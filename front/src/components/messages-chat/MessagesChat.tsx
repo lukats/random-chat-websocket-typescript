@@ -14,7 +14,9 @@ function MessagesChat() {
   } = useContext(UserContext);
   const { state: messages } = useContext(MessagesContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // TODO: socket listener
+  }, []);
 
   const sendMessage = (event: { preventDefault: Function }) => {
     event.preventDefault();
