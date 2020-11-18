@@ -2,6 +2,7 @@ import React, { FunctionComponent, useReducer } from 'react';
 import { UserContext } from './context';
 import { UserReducerStateInterface } from './interface';
 import userReducer from '../../reducers/user';
+import PropTypes from 'prop-types';
 
 const initialState: UserReducerStateInterface = {
   token: '',
@@ -19,5 +20,5 @@ export const UserProvider: FunctionComponent = ({ children }): JSX.Element => {
 };
 
 UserProvider.propTypes = {
-  children: React.Children
+  children: PropTypes.any.isRequired
 };

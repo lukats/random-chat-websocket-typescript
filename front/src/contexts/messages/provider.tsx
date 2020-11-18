@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react';
 import { MessageInterface } from './interface';
 import messagesReducer from '../../reducers/messages';
 import { MessagesContext } from './context';
+import PropTypes from 'prop-types';
 
 const initialState: MessageInterface[] = [];
 
@@ -18,5 +19,5 @@ export const MessagesProvider: FunctionComponent = ({
 };
 
 MessagesProvider.propTypes = {
-  children: React.Children
+  children: PropTypes.any.isRequired
 };
