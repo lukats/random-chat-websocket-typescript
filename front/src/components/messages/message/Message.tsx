@@ -3,17 +3,17 @@ import './Message.css';
 import { emojify } from 'react-emoji';
 
 const Message = ({
-  message: { text, user },
-  name
+  message: { text, username },
+  senderName
 }: {
-  message: { text: string; user: string };
-  name: string;
+  message: { text: string; username: string };
+  senderName: string;
 }): JSX.Element => {
   let isSentByCurrentUser = false;
 
-  const trimmedName = name.trim();
+  const trimmedName = senderName.trim();
 
-  if (user === trimmedName) {
+  if (username === trimmedName) {
     isSentByCurrentUser = true;
   }
 
@@ -29,7 +29,7 @@ const Message = ({
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{emojify(text)}</p>
       </div>
-      <p className="sentText pl-10 ">{user}</p>
+      <p className="sentText pl-10 ">{username}</p>
     </div>
   );
 };

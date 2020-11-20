@@ -3,6 +3,8 @@ import { ADD_MESSAGE } from './actionTypes';
 import { addMessage } from './functions/addMessage';
 import { MessagesState, ReducerAction } from './interface';
 
+export * from './actions';
+
 export default function reducer(
   state: MessagesState,
   action: ReducerAction

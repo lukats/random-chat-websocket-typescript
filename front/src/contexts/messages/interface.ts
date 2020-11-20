@@ -3,7 +3,7 @@ import { ReducerAction } from '../../reducers/messages/interface';
 
 export interface MessageInterface {
   text: string;
-  user: string;
+  username: string;
 }
 
 export interface MessagesContextInterface {

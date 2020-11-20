@@ -5,15 +5,15 @@ import './Messages.css';
 
 const Messages = ({
   messages,
-  name
+  senderName
 }: {
-  messages: { text: string; user: string }[];
-  name: string;
+  messages: { text: string; username: string }[];
+  senderName: string;
 }): JSX.Element => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message message={message} name={name} />
+        <Message message={message} senderName={senderName} />
       </div>
     ))}
   </ScrollToBottom>
