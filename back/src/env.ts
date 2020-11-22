@@ -10,6 +10,7 @@ type KnownNodeEnv = typeof knownNodeEnv[number];
 interface BaseEnv {
   NODE_ENV: KnownNodeEnv;
   PORT: number;
+  FRONT_END_URL: string;
   DATABASE_URL: string;
   REDIS_URL: string;
   JWT_ACCESS_SECRET: string;
@@ -41,6 +42,7 @@ const getAppEnv = (env: NodeJS.ProcessEnv = process.env): AppEnv =>
     {
       NODE_ENV: envalid.str({ choices: runNodeEnv }),
       PORT: envalid.port(),
+      FRONT_END_URL: envalid.url(),
       DATABASE_URL: envalid.url(),
       REDIS_URL: envalid.url(),
       JWT_ACCESS_SECRET: envalid.str({

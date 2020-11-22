@@ -9,6 +9,7 @@ import { getEnv } from '../env';
 import {
   isAuthenticated,
   loginMiddleware,
+  logoutMiddleware,
   signupMiddleware
 } from './middlewares';
 import * as expressWs from 'express-ws';
@@ -31,7 +32,7 @@ async function buildApp(): Promise<Express.Application | null> {
 
   const RedisStore = connectRedis(session);
 
-  app.use(cors());
+  app.use(cors({ credentials: true, origin: appEnv.FRONT_END_URL }));
   app.use(cookieParser());
   app.use(Express.json());
   app.use(Express.urlencoded({ extended: true }));
@@ -50,6 +51,7 @@ async function buildApp(): Promise<Express.Application | null> {
     })
   );
 
+  app.get('/logout', logoutMiddleware);
   app.post('/login', loginMiddleware);
   app.post('/signup', signupMiddleware);
   app.use('/chat/*', isAuthenticated);

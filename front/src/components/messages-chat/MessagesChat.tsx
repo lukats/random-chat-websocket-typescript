@@ -8,7 +8,8 @@ import { MessagesContext } from '../../contexts/messages';
 import { UserContext } from '../../contexts/user';
 import {
   sendMessage as sendMessageAction,
-  receiveMessage
+  receiveMessage,
+  eraseMessages
 } from '../../reducers/messages';
 import { signOut } from '../../reducers/user';
 
@@ -22,6 +23,7 @@ function MessagesChat(): JSX.Element {
   const timeRef = useRef<number>();
   const counterRef = useRef<number>();
   const [messageSent, setMessageSent] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   const counter = (time: number) => {
     if (typeof timeRef.current !== 'number' || messageSent) {
@@ -30,7 +32,7 @@ function MessagesChat(): JSX.Element {
     }
     const delta = time - timeRef.current;
     if (delta > parseInt(`${process.env.REACT_APP_ACCESS_EXP}`) * 1000) {
-      if (!socket) return (window.location.href = '/');
+      eraseMessages(dispatch)();
       signOut(userDispatcher)({ socket });
     } else {
       counterRef.current = requestAnimationFrame(counter);
@@ -38,6 +40,7 @@ function MessagesChat(): JSX.Element {
   };
 
   useEffect(() => {
+    setFirstLoad(false);
     counterRef.current = requestAnimationFrame(counter);
     return () => {
       if (counterRef.current === undefined) return;
@@ -47,12 +50,15 @@ function MessagesChat(): JSX.Element {
 
   useEffect(() => {
     if (!socket) {
-      window.location.href = '/';
+      if (!firstLoad) window.location.href = '/';
       return () => {
         return;
       };
     }
-    window.onunload = () => signOut(userDispatcher)({ socket });
+    window.onunload = () => {
+      eraseMessages(dispatch)();
+      signOut(userDispatcher)({ socket });
+    };
     socket.onmessage = receiveMessage(dispatch);
     return () => {
       return;
@@ -73,6 +79,16 @@ function MessagesChat(): JSX.Element {
   return (
     <div className="outerContainer">
       <div className="container">
+        <button
+          style={{ zIndex: 1 }}
+          className="button"
+          onClick={() => {
+            eraseMessages(dispatch)();
+            signOut(userDispatcher)({ socket });
+          }}
+        >
+          Sign Out
+        </button>
         <Messages messages={messages} senderName={username} />
         <Input
           message={message}

@@ -9,13 +9,17 @@ export const signUp = (dispatch: Dispatch<ReducerAction>) => {
         `${process.env.REACT_APP_BACKEND_HTTP_URL}/signup`,
         {
           method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
           body: JSON.stringify({
             username: action.payload.username,
             password: window.btoa(
               unescape(encodeURIComponent(action.payload.password))
             )
           }),
-          headers: { 'Content-Type': 'application/json' }
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
       if (res.status !== 200) throw new Error(`${res.status}`);
