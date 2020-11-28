@@ -11,7 +11,7 @@ const Input = ({
   sendMessage: (event: { preventDefault: () => void }) => void;
   message: string;
 }): JSX.Element => (
-  <form className="form">
+  <div className="form">
     <input
       className="input"
       type="text"
@@ -28,7 +28,7 @@ const Input = ({
     >
       Send
     </button>
-  </form>
+  </div>
 );
 
 export default Input;

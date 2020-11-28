@@ -30,13 +30,13 @@ export const signIn = (dispatch: Dispatch<ReducerAction>) => {
       if (!decodedToken || typeof decodedToken === 'string')
         throw new Error('Invalid token');
       const socket = new WebSocket(
-        `${process.env.REACT_APP_BACKEND_WS_URL}/chat/${decodedToken.channel}`
+        `${process.env.REACT_APP_BACKEND_WS_URL}/chat?channel=${decodedToken.channel}`
       );
       const newAction = {
         type: action.type,
         payload: { token, username, socket }
       };
-      window.location.href = '/chat';
+      action.replace('/chat');
       return dispatch(newAction);
     } catch (error) {
       return;

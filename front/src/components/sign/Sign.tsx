@@ -3,6 +3,7 @@ import { UserContext } from '../../contexts/user';
 import { signIn, signUp } from '../../reducers/user';
 import { SET_ALL } from '../../reducers/user/actionTypes';
 import './Sign.css';
+import { useHistory } from 'react-router-dom';
 
 function Sign(): JSX.Element {
   const [pseudo, setPseudo] = useState('');
@@ -14,6 +15,7 @@ function Sign(): JSX.Element {
   const [errorPassword, setErrorPassword] = useState(false);
   const [ageLimit, setAgeLimit] = useState(false);
   const { dispatch } = useContext(UserContext);
+  const history = useHistory();
 
   const registerUser = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -35,7 +37,11 @@ function Sign(): JSX.Element {
     }
     signUp(dispatch)({
       type: SET_ALL,
-      payload: { password: password1, username: pseudo }
+      payload: {
+        password: password1,
+        username: pseudo
+      },
+      replace: history.replace
     });
   };
 
@@ -48,7 +54,11 @@ function Sign(): JSX.Element {
       }
       signIn(dispatch)({
         type: SET_ALL,
-        payload: { password: password1, username: pseudo }
+        payload: {
+          password: password1,
+          username: pseudo
+        },
+        replace: history.replace
       });
     } else {
       registerUser(event);

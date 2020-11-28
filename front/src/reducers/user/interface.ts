@@ -23,4 +23,5 @@ export interface ReducerAction {
 export interface SignAction {
   type: string;
   payload: UserSignPayload;
+  replace: (path: string) => void;
 }

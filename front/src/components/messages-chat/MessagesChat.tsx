@@ -12,6 +12,7 @@ import {
   eraseMessages
 } from '../../reducers/messages';
 import { signOut } from '../../reducers/user';
+import { useHistory } from 'react-router-dom';
 
 function MessagesChat(): JSX.Element {
   const [message, setMessage] = useState('');
@@ -24,6 +25,7 @@ function MessagesChat(): JSX.Element {
   const counterRef = useRef<number>();
   const [messageSent, setMessageSent] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+  const history = useHistory();
 
   const counter = (time: number) => {
     if (typeof timeRef.current !== 'number' || messageSent) {
@@ -33,7 +35,7 @@ function MessagesChat(): JSX.Element {
     const delta = time - timeRef.current;
     if (delta > parseInt(`${process.env.REACT_APP_ACCESS_EXP}`) * 1000) {
       eraseMessages(dispatch)();
-      signOut(userDispatcher)({ socket });
+      signOut(userDispatcher)({ socket, replace: history.replace });
     } else {
       counterRef.current = requestAnimationFrame(counter);
     }
@@ -50,14 +52,14 @@ function MessagesChat(): JSX.Element {
 
   useEffect(() => {
     if (!socket) {
-      if (!firstLoad) window.location.href = '/';
+      if (!firstLoad) history.replace('/');
       return () => {
         return;
       };
     }
     window.onunload = () => {
       eraseMessages(dispatch)();
-      signOut(userDispatcher)({ socket });
+      signOut(userDispatcher)({ socket, replace: history.replace });
     };
     socket.onmessage = receiveMessage(dispatch);
     return () => {
@@ -71,24 +73,28 @@ function MessagesChat(): JSX.Element {
 
     sendMessageAction(dispatch)({
       message: { username, text: message },
-      socket
+      socket,
+      dispatch: userDispatcher
     });
+    setMessage('');
     setMessageSent(true);
   };
 
   return (
     <div className="outerContainer">
       <div className="container">
-        <button
-          style={{ zIndex: 1 }}
-          className="button"
-          onClick={() => {
-            eraseMessages(dispatch)();
-            signOut(userDispatcher)({ socket });
-          }}
-        >
-          Sign Out
-        </button>
+        <div className="header-bar">
+          <button
+            style={{ zIndex: 1 }}
+            className="button switch sign-out-button"
+            onClick={() => {
+              eraseMessages(dispatch)();
+              signOut(userDispatcher)({ socket, replace: history.replace });
+            }}
+          >
+            Sign Out
+          </button>
+        </div>
         <Messages messages={messages} senderName={username} />
         <Input
           message={message}

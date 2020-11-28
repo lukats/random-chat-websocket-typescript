@@ -7,21 +7,16 @@ import * as session from 'express-session';
 import { getRedisClient } from '../utils';
 import { getEnv } from '../env';
 import {
-  isAuthenticated,
   loginMiddleware,
   logoutMiddleware,
   signupMiddleware
 } from './middlewares';
-import * as expressWs from 'express-ws';
 
 async function buildApp(): Promise<Express.Application | null> {
   const appEnv = getEnv(process.env);
   if (!appEnv) return null;
 
-  const appBase = Express();
-  const instanceWs = expressWs(appBase);
-
-  const { app } = instanceWs;
+  const app = Express();
 
   let redis;
   try {
@@ -54,12 +49,6 @@ async function buildApp(): Promise<Express.Application | null> {
   app.get('/logout', logoutMiddleware);
   app.post('/login', loginMiddleware);
   app.post('/signup', signupMiddleware);
-  app.use('/chat/*', isAuthenticated);
-  /*
-   **    app.ws('/chat/:id', (ws, req) => {
-   **      ws.on('', () => {});
-   **    });
-   */
 
   return app;
 }

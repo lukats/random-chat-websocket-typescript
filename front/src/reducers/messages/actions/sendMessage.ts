@@ -8,6 +8,8 @@ export const sendMessage = (dispatch: Dispatch<ReducerAction>) => {
       const codedMessage = window.btoa(
         unescape(encodeURIComponent(JSON.stringify(action.message)))
       );
+      if (action.socket.readyState !== action.socket.OPEN)
+        throw new Error('Socket not open');
       action.socket.send(codedMessage);
       const newAction = {
         type: ADD_MESSAGE,

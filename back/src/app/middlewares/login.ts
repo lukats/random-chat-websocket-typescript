@@ -1,16 +1,13 @@
-import { sign } from 'jsonwebtoken';
 import { compare } from 'bcryptjs';
-import { v1 as uuid } from 'uuid';
 import { getEnv } from '../../env';
-import { Request, Response, NextFunction } from 'express';
-import { getRedisClient } from '../../utils';
+import { Request, Response } from 'express';
+import { assignChannel, getRedisClient } from '../../utils';
 import { signTokens } from '../../utils/signTokens';
 import { User } from '../../models';
 
 export const loginMiddleware = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ): Promise<void> => {
   const redis = getRedisClient();
   const appEnv = getEnv(process.env);
@@ -33,14 +30,8 @@ export const loginMiddleware = async (
     );
     await redis.set(tokens.tokenUID, tokens.refreshToken);
     res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken);
-    // TODO: match to available channel (new or with one user)
-    let token = sign(
-      { iat: Date.now() / 1000, channel: uuid() },
-      appEnv.CERTIF_SECRET
-    );
-    token = Buffer.from(token, 'utf8').toString('base64');
-    // END
-    res.status(200).json({ username: user.username, token }).end();
+    const token = await assignChannel(user.id);
+    return res.status(200).json({ username: user.username, token }).end();
   } catch (error) {
     if (
       req.session &&
@@ -56,5 +47,4 @@ export const loginMiddleware = async (
     }
     return res.status(401).end();
   }
-  next();
 };

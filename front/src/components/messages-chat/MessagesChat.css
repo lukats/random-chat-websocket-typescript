@@ -16,6 +16,20 @@
   width: 40%;
 }
 
+.header-bar {
+  width: 100%;
+  position: relative;
+}
+
+.sign-out-button {
+  position: absolute;
+  width: 25%;
+  top: 0;
+  right: 0;
+  font-size: 0.7em;
+  padding: 3px 1px;
+}
+
 @media (min-width: 320px) and (max-width: 480px) {
   .outerContainer {
     height: 100%;
