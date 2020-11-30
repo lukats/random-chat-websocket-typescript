@@ -11,7 +11,7 @@ export const updateTokens = async (
   try {
     const redis = getRedisClient();
     let user = null;
-    user = await User.findOne({ id: tokenData.id });
+    user = await User.findById(tokenData.id);
     if (!user) throw new Error('No user !');
     await redis.del(tokenData.ref as string);
     tokens = await signTokens(user.id, user.passwordCount as number);

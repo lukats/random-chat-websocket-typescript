@@ -2,9 +2,9 @@ import { Dispatch } from 'react';
 import { ReducerAction } from '../../reducers/user/interface';
 
 export interface UserReducerStateInterface {
-  token: string;
+  channel: string;
   username: string;
-  socket: WebSocket | null;
+  socket: SocketIOClient.Socket | null;
 }
 
 export interface UserContextInterface {

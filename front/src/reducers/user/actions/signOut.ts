@@ -4,7 +4,7 @@ import { ReducerAction } from '../interface';
 
 export const signOut = (dispatch: Dispatch<ReducerAction>) => {
   return async (action: {
-    socket: WebSocket | null;
+    socket: SocketIOClient.Socket | null;
     replace: (path: string) => void;
   }): Promise<void> => {
     try {

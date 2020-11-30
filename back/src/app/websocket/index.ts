@@ -1,67 +1,35 @@
 import { getEnv } from '../../env';
-import { Server as ServerHttp } from 'http';
+import { IncomingMessage, Server as ServerHttp } from 'http';
 import { Server as ServerHttps } from 'https';
-import * as WebSocket from 'ws';
-import { Server as ServerWs, MessageEvent } from 'ws';
-import { isAuthenticated, isInChannel, verifyClient } from './handlers';
-import { parseCookies } from '../../utils';
+import { verifyClient } from './handlers';
 import * as urlParser from 'url-parse';
-import { EventEmitter } from 'events';
+import { Server as SocketServer, Socket } from 'socket.io';
 
-export interface OpenEventParams {
-  channel: string;
-  ws: WebSocket;
-}
+export const ioMiddlewareWrapper = (
+  middleware: (req: IncomingMessage, next: () => void) => Promise<void> | void
+) => (socket: Socket, next: () => void): Promise<void> | void =>
+  middleware(socket.request, next);
 
-export interface CloseEventParams {
-  channel: string;
-  ws: WebSocket;
-}
-
-export interface MessageEventParams {
-  channel: string;
-  ws: WebSocket;
-  data: string;
-}
-
-export const buildSocket = (
-  server: ServerHttp | ServerHttps,
-  emitter: EventEmitter['emit']
-): ServerWs => {
+export const buildSocket = (server: ServerHttp | ServerHttps): SocketServer => {
   const appEnv = getEnv(process.env);
   if (!appEnv) throw new Error('No environment variable');
 
-  const wss = new ServerWs({
-    server,
-    verifyClient,
-    path: '/chat'
-  });
+  const io = new SocketServer(server);
 
-  wss.on('connection', async (ws, req) => {
-    const cookies = parseCookies(`${req.headers['cookie']}`);
-    if (!(await isAuthenticated(cookies))) return;
-    if (!(await isInChannel(cookies, req.url))) return;
-
+  io.use(
+    ioMiddlewareWrapper(async (req, next) => {
+      if (!(await verifyClient(req.headers.origin as string, req))) return;
+      next();
+    })
+  );
+  io.on('connection', (socket: Socket) => {
     const {
       query: { channel }
-    } = urlParser(`${req.url}`, true);
-    if (!channel) return;
+    } = urlParser(`${socket.request.url}`, true);
 
-    ws.onopen = () => {
-      emitter('open', { channel, ws } as OpenEventParams);
-    };
-
-    ws.onmessage = (event: MessageEvent) => {
-      emitter('message', {
-        channel,
-        ws,
-        data: event.data
-      } as MessageEventParams);
-    };
-    ws.onclose = () => {
-      emitter('close', { channel, ws } as CloseEventParams);
-    };
+    socket.on(`${channel}`, (data) => {
+      socket.broadcast.emit(`${channel}`, data);
+    });
   });
-
-  return wss;
+  return io;
 };

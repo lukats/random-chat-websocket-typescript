@@ -18,7 +18,7 @@ export const isInChannel = async (
   if (!query.channel) return false;
   const tokenData = decode(accessToken) as Record<string, unknown>;
   try {
-    const user = await User.findOne({ id: tokenData.id });
+    const user = await User.findById(tokenData.id);
     if (!user) return false;
     const channel = await Channel.aggregate([
       {

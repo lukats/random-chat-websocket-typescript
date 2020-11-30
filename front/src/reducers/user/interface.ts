@@ -1,7 +1,8 @@
 export interface UserPayload {
   username?: string;
+  channel?: string;
   token?: string;
-  socket?: WebSocket | null;
+  socket?: SocketIOClient.Socket | null;
 }
 
 export interface UserSignPayload {
@@ -11,8 +12,8 @@ export interface UserSignPayload {
 
 export interface UserState {
   username: string;
-  token: string;
-  socket: WebSocket | null;
+  channel: string;
+  socket: SocketIOClient.Socket | null;
 }
 
 export interface ReducerAction {

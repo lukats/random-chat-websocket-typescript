@@ -3,10 +3,10 @@ import { ADD_MESSAGE } from '../actionTypes';
 import { ReducerAction } from '../interface';
 
 export const receiveMessage = (dispatch: Dispatch<ReducerAction>) => {
-  return (action: MessageEvent): void => {
+  return (action: string): void => {
     try {
       const decodedMessage = JSON.parse(
-        decodeURIComponent(escape(window.atob(action.data)))
+        decodeURIComponent(escape(window.atob(action)))
       );
       const newAction = {
         type: ADD_MESSAGE,

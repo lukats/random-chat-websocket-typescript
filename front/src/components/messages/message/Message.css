@@ -2,6 +2,7 @@
   background: #f3f3f3;
   border-radius: 10px;
   padding: 1px 10px;
+  margin-top: 5px;
   color: white;
   display: inline-block;
   max-width: 80%;
@@ -22,13 +23,13 @@
 .messageContainer {
   display: flex;
   justify-content: flex-end;
-  padding: 0 3%;
-  margin-top: 3px;
+  flex-wrap: wrap;
+  width: auto;
+  flex-direction: row;
+  padding: 0 2%;
 }
 
 .sentText {
-  display: flex;
-  align-items: center;
   font-family: Helvetica;
   color: #828282;
   letter-spacing: 0.3px;

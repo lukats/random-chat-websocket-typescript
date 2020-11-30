@@ -11,6 +11,7 @@ export interface ReducerAction {
 
 export interface SendMessageAction {
   message: MessageInterface;
-  socket: WebSocket;
+  socket: SocketIOClient.Socket;
+  channel: string;
   dispatch: Dispatch<ReducerActionFromUser>;
 }

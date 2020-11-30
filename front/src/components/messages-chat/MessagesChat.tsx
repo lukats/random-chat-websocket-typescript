@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 function MessagesChat(): JSX.Element {
   const [message, setMessage] = useState('');
   const {
-    state: { username, socket },
+    state: { username, socket, channel },
     dispatch: userDispatcher
   } = useContext(UserContext);
   const { state: messages, dispatch } = useContext(MessagesContext);
@@ -61,7 +61,7 @@ function MessagesChat(): JSX.Element {
       eraseMessages(dispatch)();
       signOut(userDispatcher)({ socket, replace: history.replace });
     };
-    socket.onmessage = receiveMessage(dispatch);
+    socket.on(channel, receiveMessage(dispatch));
     return () => {
       return;
     };
@@ -74,6 +74,7 @@ function MessagesChat(): JSX.Element {
     sendMessageAction(dispatch)({
       message: { username, text: message },
       socket,
+      channel,
       dispatch: userDispatcher
     });
     setMessage('');

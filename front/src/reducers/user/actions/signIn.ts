@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import { ReducerAction, UserPayload, SignAction } from '../interface';
 import { decode } from 'jsonwebtoken';
+import io from 'socket.io-client';
 
 export const signIn = (dispatch: Dispatch<ReducerAction>) => {
   return async (action: SignAction): Promise<void> => {
@@ -29,12 +30,13 @@ export const signIn = (dispatch: Dispatch<ReducerAction>) => {
       const decodedToken = decode(clearToken);
       if (!decodedToken || typeof decodedToken === 'string')
         throw new Error('Invalid token');
-      const socket = new WebSocket(
-        `${process.env.REACT_APP_BACKEND_WS_URL}/chat?channel=${decodedToken.channel}`
+      const socket = io(
+        `${process.env.REACT_APP_BACKEND_HTTP_URL}/?channel=${decodedToken.channel}`,
+        { transports: ['websocket', 'polling', 'flashsocket'] }
       );
       const newAction = {
         type: action.type,
-        payload: { token, username, socket }
+        payload: { channel: `${decodedToken.channel}`, username, socket }
       };
       action.replace('/chat');
       return dispatch(newAction);

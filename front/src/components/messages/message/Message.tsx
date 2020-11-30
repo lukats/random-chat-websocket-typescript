@@ -19,7 +19,7 @@ const Message = ({
 
   return isSentByCurrentUser ? (
     <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{trimmedName}</p>
+      {/* <p className="sentText pr-10">{trimmedName}</p> */}
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{emojify(text)}</p>
       </div>
@@ -27,9 +27,9 @@ const Message = ({
   ) : (
     <div className="messageContainer justifyStart">
       <div className="messageBox backgroundLight">
+        <span className="sentText pr-10">{username}</span>
         <p className="messageText colorDark">{emojify(text)}</p>
       </div>
-      <p className="sentText pl-10 ">{username}</p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
 export * from './setAll';
-export * from './setToken';
+export * from './setChannel';
 export * from './setUsername';
 export * from './setSocket';

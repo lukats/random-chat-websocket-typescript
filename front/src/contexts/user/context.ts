@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { UserContextInterface } from './interface';
 
 const initialContext: UserContextInterface = {
-  state: { token: '', username: '', socket: null },
+  state: { channel: '', username: '', socket: null },
   dispatch: () => {
     return;
   }

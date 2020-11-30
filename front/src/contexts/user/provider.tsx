@@ -5,7 +5,7 @@ import userReducer from '../../reducers/user';
 import PropTypes from 'prop-types';
 
 const initialState: UserReducerStateInterface = {
-  token: '',
+  channel: '',
   username: '',
   socket: null
 };
