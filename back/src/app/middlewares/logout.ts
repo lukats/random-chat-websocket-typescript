@@ -20,6 +20,7 @@ export const logoutMiddleware = async (
       res.status(200).end();
     });
   } catch (error) {
+    await global.airbrake.notify({ error });
     res.status(500).end();
   }
 };

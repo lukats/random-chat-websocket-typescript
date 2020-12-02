@@ -12,9 +12,9 @@ export const signOut = (dispatch: Dispatch<ReducerAction>) => {
         mode: 'cors',
         credentials: 'include'
       });
-      if (action.socket) action.socket.close();
+      if (action.socket) action.socket.disconnect();
+      dispatch({ type: RESET, payload: {} });
       action.replace('/');
-      return dispatch({ type: RESET, payload: {} });
     } catch (error) {
       return;
     }

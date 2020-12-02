@@ -16,6 +16,7 @@ export const isValidTokens = async (
   try {
     redis = getRedisClient();
   } catch (error) {
+    await global.airbrake.notify({ error });
     return [false, false];
   }
   try {
@@ -23,6 +24,7 @@ export const isValidTokens = async (
     refreshToken = await redis.get(tokenData.ref as string);
     if (!refreshToken) throw new Error('Something wrong BANG');
   } catch (error) {
+    await global.airbrake.notify({ error });
     if (error.message === 'Something wrong BANG') return [false, false];
     areValid[0] = false;
   }
@@ -36,6 +38,7 @@ export const isValidTokens = async (
     const isCorrect = await compare(token, refreshTokenData.hash as string);
     if (!isCorrect) throw new Error('Something wrong BANG');
   } catch (error) {
+    await global.airbrake.notify({ error });
     await redis.del(tokenData.ref as string);
     if (error.message === 'Something wrong BANG') areValid[0] = false;
     areValid[1] = false;

@@ -1,13 +1,20 @@
 import 'reflect-metadata';
+import './globals.js';
 import { getEnv } from './env';
 import { connect, disconnect } from 'mongoose';
 import buildApp from './app';
 import { createServer as serverHTTP } from 'http';
 import { createServer as serverHTTPS } from 'https';
 import { buildSocket } from './app/websocket';
+import { Notifier } from '@airbrake/node';
 
 const main = async (): Promise<void> => {
   try {
+    global.airbrake = new Notifier({
+      projectId: parseInt(`${process.env.PROJECT_ID}`, 10),
+      projectKey: `${process.env.PROJECT_KEY}`,
+      environment: process.env.NODE_ENV
+    });
     const app = await buildApp();
     if (!app) throw new Error('No app, because no environment defined');
 
@@ -25,7 +32,11 @@ const main = async (): Promise<void> => {
 
     const io = buildSocket(server);
 
-    server.listen(appEnv.PORT, () => console.info(`∆ :${appEnv.PORT}`));
+    server.listen(
+      appEnv.PORT,
+      () =>
+        appEnv.NODE_ENV === 'development' && console.info(`∆ :${appEnv.PORT}`)
+    );
     await new Promise((resolve, reject) => {
       server.on('close', (msg: unknown) => {
         io.close();
@@ -37,7 +48,7 @@ const main = async (): Promise<void> => {
       });
     });
   } catch (err) {
-    console.info('∆!!!\n\n', err);
+    await global.airbrake.notify({ error: err });
     process.exit(1);
   } finally {
     await disconnect();

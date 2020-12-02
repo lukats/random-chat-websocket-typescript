@@ -33,6 +33,7 @@ export const loginMiddleware = async (
     const token = await assignChannel(user.id);
     return res.status(200).json({ username: user.username, token }).end();
   } catch (error) {
+    await global.airbrake.notify({ error });
     if (
       req.session &&
       (connectionRetry !== null || connectionRetry !== undefined)

@@ -10,9 +10,15 @@ export const assignChannel = async (userId: string): Promise<string> => {
   let channel = null;
   channel = await Channel.aggregate([
     {
-      $match: { users: { $size: 1 } }
+      $match: { users: { $elemMatch: { $eq: userId } } }
     }
   ]);
+  if (!channel.length)
+    channel = await Channel.aggregate([
+      {
+        $match: { users: { $size: 1 } }
+      }
+    ]);
   if (!channel.length)
     channel = await Channel.aggregate([
       {
@@ -24,7 +30,12 @@ export const assignChannel = async (userId: string): Promise<string> => {
     name = channel[0].name;
     await Channel.updateOne(
       { name: channel[0].name },
-      { users: [...channel[0].users, userId] }
+      {
+        users: [
+          ...channel[0].users.filter((id: string) => id !== userId),
+          userId
+        ]
+      }
     );
   } else {
     channel = await Channel.create({ name, users: [userId] });

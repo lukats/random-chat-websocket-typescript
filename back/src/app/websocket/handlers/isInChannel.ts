@@ -28,6 +28,7 @@ export const isInChannel = async (
     if (!channel.length) return false;
     if (channel[0].name !== query.channel) return false;
   } catch (error) {
+    await global.airbrake.notify({ error });
     return false;
   }
   return true;

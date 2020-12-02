@@ -20,6 +20,7 @@ export const isAuthenticated = async (
     const isPresent = await isUserPresent(accessToken);
     if (!isPresent) return false;
   } catch (error) {
+    await global.airbrake.notify({ error });
     return false;
   }
   return true;

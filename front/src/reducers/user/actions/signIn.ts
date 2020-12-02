@@ -38,8 +38,8 @@ export const signIn = (dispatch: Dispatch<ReducerAction>) => {
         type: action.type,
         payload: { channel: `${decodedToken.channel}`, username, socket }
       };
+      dispatch(newAction);
       action.replace('/chat');
-      return dispatch(newAction);
     } catch (error) {
       return;
     }

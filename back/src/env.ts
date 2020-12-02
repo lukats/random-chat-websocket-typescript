@@ -46,25 +46,46 @@ const getAppEnv = (env: NodeJS.ProcessEnv = process.env): AppEnv =>
       DATABASE_URL: envalid.url(),
       REDIS_URL: envalid.url(),
       JWT_ACCESS_SECRET: envalid.str({
-        choices: ['access_secret'] as const
+        choices: [
+          'access_secret',
+          `${process.env.__DEFINED_JWT_ACCESS_SECRET__}`
+        ] as const
       }),
       CERTIF_SECRET: envalid.str({
-        choices: ['certif_secret'] as const
+        choices: [
+          'certif_secret',
+          `${process.env.__DEFINED_CERTIF_SECRET__}`
+        ] as const
       }),
       JWT_REFRESH_SECRET: envalid.str({
-        choices: ['refresh_secret'] as const
+        choices: [
+          'refresh_secret',
+          `${process.env.__DEFINED_JWT_REFRESH_SECRET__}`
+        ] as const
       }),
       SESSION_SECRET: envalid.str({
-        choices: ['session_secret'] as const
+        choices: [
+          'session_secret',
+          `${process.env.__DEFINED_SESSION_SECRET__}`
+        ] as const
       }),
       ACCESS_TOKEN_NAME: envalid.str({
-        choices: ['access_token_name'] as const
+        choices: [
+          'access_token_name',
+          `${process.env.__DEFINED_ACCESS_TOKEN_NAME__}`
+        ] as const
       }),
       REFRESH_TOKEN_NAME: envalid.str({
-        choices: ['refresh_token_name'] as const
+        choices: [
+          'refresh_token_name',
+          `${process.env.__DEFINED_REFRESH_TOKEN_NAME__}`
+        ] as const
       }),
       SESSION_NAME: envalid.str({
-        choices: ['session_name'] as const
+        choices: [
+          'session_name',
+          `${process.env.__DEFINED_SESSION_NAME__}`
+        ] as const
       }),
       JWT_ACCESS_EXP: envalid.num({ choices: [10, 3600] as const }),
       JWT_REFRESH_EXP: envalid.num({ choices: [30, 86400] as const })

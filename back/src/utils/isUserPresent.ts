@@ -8,6 +8,7 @@ export const isUserPresent = async (token: string): Promise<boolean> => {
     const user = await User.findById(tokenData.id);
     if (!user) throw new Error('No user');
   } catch (error) {
+    await global.airbrake.notify({ error });
     return false;
   }
   return true;

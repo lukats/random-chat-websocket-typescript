@@ -34,6 +34,7 @@ export const signupMiddleware = async (
     const token = await assignChannel(newUser.id);
     return res.status(200).json({ username: newUser.username, token }).end();
   } catch (error) {
+    await global.airbrake.notify({ error });
     if (
       req.session &&
       (registrationRetry !== null || registrationRetry !== undefined)

@@ -17,6 +17,7 @@ export const updateTokens = async (
     tokens = await signTokens(user.id, user.passwordCount as number);
     await redis.set(tokens.tokenUID, tokens.refreshToken);
   } catch (error) {
+    await global.airbrake.notify({ error });
     return null;
   }
   return tokens;

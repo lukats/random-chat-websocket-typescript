@@ -24,7 +24,6 @@ function MessagesChat(): JSX.Element {
   const timeRef = useRef<number>();
   const counterRef = useRef<number>();
   const [messageSent, setMessageSent] = useState(false);
-  const [firstLoad, setFirstLoad] = useState(true);
   const history = useHistory();
 
   const counter = (time: number) => {
@@ -42,7 +41,6 @@ function MessagesChat(): JSX.Element {
   };
 
   useEffect(() => {
-    setFirstLoad(false);
     counterRef.current = requestAnimationFrame(counter);
     return () => {
       if (counterRef.current === undefined) return;
@@ -51,16 +49,22 @@ function MessagesChat(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    window.addEventListener('unload', async () => {
+      eraseMessages(dispatch)();
+      await signOut(userDispatcher)({ socket, replace: history.replace });
+    });
+    window.onbeforeunload = () => {
+      window.setTimeout(() => {
+        window.location.replace('/');
+      }, 0);
+      window.onbeforeunload = null;
+    };
     if (!socket) {
-      if (!firstLoad) history.replace('/');
+      history.replace('/');
       return () => {
         return;
       };
     }
-    window.onunload = () => {
-      eraseMessages(dispatch)();
-      signOut(userDispatcher)({ socket, replace: history.replace });
-    };
     socket.on(channel, receiveMessage(dispatch));
     return () => {
       return;
@@ -88,9 +92,12 @@ function MessagesChat(): JSX.Element {
           <button
             style={{ zIndex: 1 }}
             className="button switch sign-out-button"
-            onClick={() => {
+            onClick={async () => {
               eraseMessages(dispatch)();
-              signOut(userDispatcher)({ socket, replace: history.replace });
+              await signOut(userDispatcher)({
+                socket,
+                replace: history.replace
+              });
             }}
           >
             Sign Out

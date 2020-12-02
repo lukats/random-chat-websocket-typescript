@@ -22,6 +22,7 @@ async function buildApp(): Promise<Express.Application | null> {
   try {
     redis = getRedisClient();
   } catch (error) {
+    await global.airbrake.notify({ error });
     return null;
   }
 

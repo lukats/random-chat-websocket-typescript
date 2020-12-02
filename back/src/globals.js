@@ -1,0 +1,1 @@
+global.airbrake = null;
