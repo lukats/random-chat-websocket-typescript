@@ -1,19 +1,20 @@
 import React from 'react';
 import { Notifier } from '@airbrake/browser';
+import { airbrakeParams } from './utils';
 
 export class ErrorBoundary extends React.Component<
   Record<string, unknown>,
   { hasError: boolean }
 > {
   airbrake: Notifier;
+
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
       hasError: false
     };
     this.airbrake = new Notifier({
-      projectId: parseInt(`${process.env.REACT_APP_PROJECT_ID}`),
-      projectKey: `${process.env.REACT_APP_PROJECT_KEY}`
+      ...airbrakeParams()
     });
   }
 
