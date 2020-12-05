@@ -12,6 +12,7 @@
     "dev:up:db:containers": "./scripts/db.dev.sh up:containers",
     "dev:down:db:containers": "./scripts/db.dev.sh down:containers",
     "dev:up:back": "cd back && yarn dev && cd ..",
+    "prod:up:back": "cd back && yarn start && cd ..",
     "dev:up:front": "cd front && yarn start && cd ..",
     "dev:back": "yarn dev:up:db:containers && yarn dev:up:back",
     "lint": "eslint . --fix --ext .ts,.tsx",
