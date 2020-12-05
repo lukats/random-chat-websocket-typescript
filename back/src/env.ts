@@ -90,7 +90,13 @@ const getAppEnv = (env: NodeJS.ProcessEnv = process.env): AppEnv =>
       JWT_ACCESS_EXP: envalid.num({ choices: [10, 3600] as const }),
       JWT_REFRESH_EXP: envalid.num({ choices: [30, 86400] as const })
     },
-    { ...envalidOptions, dotEnvPath: path.resolve('.env') }
+    {
+      ...envalidOptions,
+      dotEnvPath:
+        process.env.NODE_ENV === 'development'
+          ? path.resolve('.env')
+          : undefined
+    }
   );
 
 const isAppEnv = (env: AppEnv): env is AppEnv =>
