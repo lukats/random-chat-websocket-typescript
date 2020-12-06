@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "dev": "dotenv -- nodemon",
-    "start": "yarn build && dotenv -- node ./dist/index.js"
+    "start": "dotenv -- node ./dist/index.js"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
