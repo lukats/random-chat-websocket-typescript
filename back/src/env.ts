@@ -48,43 +48,43 @@ const getAppEnv = (env: NodeJS.ProcessEnv = process.env): AppEnv =>
       JWT_ACCESS_SECRET: envalid.str({
         choices: [
           'access_secret',
-          `${process.env.__DEFINED_JWT_ACCESS_SECRET__}`
+          `${process.env.ENV__DEFINED_JWT_ACCESS_SECRET}`
         ] as const
       }),
       CERTIF_SECRET: envalid.str({
         choices: [
           'certif_secret',
-          `${process.env.__DEFINED_CERTIF_SECRET__}`
+          `${process.env.ENV__DEFINED_CERTIF_SECRET}`
         ] as const
       }),
       JWT_REFRESH_SECRET: envalid.str({
         choices: [
           'refresh_secret',
-          `${process.env.__DEFINED_JWT_REFRESH_SECRET__}`
+          `${process.env.ENV__DEFINED_JWT_REFRESH_SECRET}`
         ] as const
       }),
       SESSION_SECRET: envalid.str({
         choices: [
           'session_secret',
-          `${process.env.__DEFINED_SESSION_SECRET__}`
+          `${process.env.ENV__DEFINED_SESSION_SECRET}`
         ] as const
       }),
       ACCESS_TOKEN_NAME: envalid.str({
         choices: [
           'access_token_name',
-          `${process.env.__DEFINED_ACCESS_TOKEN_NAME__}`
+          `${process.env.ENV__DEFINED_ACCESS_TOKEN_NAME}`
         ] as const
       }),
       REFRESH_TOKEN_NAME: envalid.str({
         choices: [
           'refresh_token_name',
-          `${process.env.__DEFINED_REFRESH_TOKEN_NAME__}`
+          `${process.env.ENV__DEFINED_REFRESH_TOKEN_NAME}`
         ] as const
       }),
       SESSION_NAME: envalid.str({
         choices: [
           'session_name',
-          `${process.env.__DEFINED_SESSION_NAME__}`
+          `${process.env.ENV__DEFINED_SESSION_NAME}`
         ] as const
       }),
       JWT_ACCESS_EXP: envalid.num({ choices: [10, 3600] as const }),
