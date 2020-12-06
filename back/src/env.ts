@@ -87,7 +87,7 @@ const getAppEnv = (env: NodeJS.ProcessEnv = process.env): AppEnv =>
           `${process.env.ENV__DEFINED_SESSION_NAME}`
         ] as const
       }),
-      JWT_ACCESS_EXP: envalid.num({ choices: [10, 3600] as const }),
+      JWT_ACCESS_EXP: envalid.num({ choices: [10, 300, 3600] as const }),
       JWT_REFRESH_EXP: envalid.num({ choices: [30, 86400] as const })
     },
     {
