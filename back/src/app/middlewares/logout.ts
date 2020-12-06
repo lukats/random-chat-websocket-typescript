@@ -15,7 +15,10 @@ export const logoutMiddleware = async (
     await global.redis.del(tokenData.ref as string);
     await leaveChannel(tokenData.id as string);
     res.clearCookie(appEnv.ACCESS_TOKEN_NAME, {
-      domain: appEnv.FRONT_END_URL
+      domain:
+        appEnv.NODE_ENV === 'development'
+          ? appEnv.FRONT_END_URL.replace('http://', '')
+          : appEnv.FRONT_END_URL.replace('https://', '')
     });
     req.session.destroy(() => {
       res.status(200).end();
