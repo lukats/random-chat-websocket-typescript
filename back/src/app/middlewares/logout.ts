@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRedisClient, leaveChannel } from '../../utils';
+import { leaveChannel } from '../../utils';
 import { getEnv } from '../../env';
 import { decode } from 'jsonwebtoken';
 
@@ -12,8 +12,7 @@ export const logoutMiddleware = async (
   const token = req.cookies[appEnv.ACCESS_TOKEN_NAME];
   try {
     const tokenData = decode(token) as Record<string, unknown>;
-    const redis = getRedisClient();
-    await redis.del(tokenData.ref as string);
+    await global.redis.del(tokenData.ref as string);
     await leaveChannel(tokenData.id as string);
     res.clearCookie(appEnv.ACCESS_TOKEN_NAME);
     req.session.destroy(() => {

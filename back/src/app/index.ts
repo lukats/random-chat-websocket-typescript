@@ -18,9 +18,8 @@ async function buildApp(): Promise<Express.Application | null> {
 
   const app = Express();
 
-  let redis;
   try {
-    redis = getRedisClient();
+    global.redis = getRedisClient();
   } catch (error) {
     await global.airbrake.notify({ error });
     return null;
@@ -39,11 +38,12 @@ async function buildApp(): Promise<Express.Application | null> {
   );
   app.use(
     session({
-      store: new RedisStore({ client: redis }),
+      store: new RedisStore({ client: global.redis }),
       secret: appEnv.SESSION_SECRET,
       resave: false,
       name: appEnv.SESSION_NAME,
-      saveUninitialized: false
+      saveUninitialized: false,
+      cookie: { maxAge: Date.now() + appEnv.JWT_REFRESH_EXP * 1000 }
     })
   );
 

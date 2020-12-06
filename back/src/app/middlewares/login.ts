@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
 import { getEnv } from '../../env';
 import { Request, Response } from 'express';
-import { assignChannel, getRedisClient } from '../../utils';
+import { assignChannel } from '../../utils';
 import { signTokens } from '../../utils/signTokens';
 import { User } from '../../models';
 
@@ -9,7 +9,6 @@ export const loginMiddleware = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const redis = getRedisClient();
   const appEnv = getEnv(process.env);
   if (!appEnv) return res.status(500).end();
 
@@ -28,7 +27,7 @@ export const loginMiddleware = async (
       user.id as string,
       user.passwordCount as number
     );
-    await redis.set(tokens.tokenUID, tokens.refreshToken);
+    await global.redis.set(tokens.tokenUID, tokens.refreshToken);
     res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken);
     const token = await assignChannel(user.id);
     return res.status(200).json({ username: user.username, token }).end();
