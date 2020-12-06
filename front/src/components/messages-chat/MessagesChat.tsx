@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback
+} from 'react';
 
 import Messages from '../messages/Messages';
 import Input from '../input-chat/Input';
@@ -26,19 +32,22 @@ function MessagesChat(): JSX.Element {
   const [messageSent, setMessageSent] = useState(false);
   const history = useHistory();
 
-  const counter = (time: number) => {
-    if (typeof timeRef.current !== 'number' || messageSent) {
-      timeRef.current = time;
-      setMessageSent(false);
-    }
-    const delta = time - timeRef.current;
-    if (delta > parseInt(`${process.env.REACT_APP_ACCESS_EXP}`) * 1000) {
-      eraseMessages(dispatch)();
-      signOut(userDispatcher)({ socket, replace: history.replace });
-    } else {
-      counterRef.current = requestAnimationFrame(counter);
-    }
-  };
+  const counter = useCallback(
+    (time: number) => {
+      if (typeof timeRef.current !== 'number' || messageSent) {
+        timeRef.current = time;
+        setMessageSent(false);
+      }
+      const delta = time - timeRef.current;
+      if (delta > parseInt(`${process.env.REACT_APP_ACCESS_EXP}`) * 1000) {
+        eraseMessages(dispatch)();
+        signOut(userDispatcher)({ socket, replace: history.replace });
+      } else {
+        counterRef.current = requestAnimationFrame(counter);
+      }
+    },
+    [dispatch, history.replace, messageSent, socket, userDispatcher]
+  );
 
   useEffect(() => {
     counterRef.current = requestAnimationFrame(counter);
@@ -46,7 +55,7 @@ function MessagesChat(): JSX.Element {
       if (counterRef.current === undefined) return;
       cancelAnimationFrame(counterRef.current);
     };
-  }, []);
+  }, [counter]);
 
   useEffect(() => {
     window.addEventListener('unload', async () => {
@@ -69,7 +78,7 @@ function MessagesChat(): JSX.Element {
     return () => {
       return;
     };
-  }, [socket]);
+  }, [channel, dispatch, history, socket, userDispatcher]);
 
   const sendMessage = (event: { preventDefault: () => void }) => {
     event.preventDefault();
