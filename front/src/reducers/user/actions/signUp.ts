@@ -31,7 +31,7 @@ export const signUp = (dispatch: Dispatch<ReducerAction>) => {
       if (!decodedToken || typeof decodedToken === 'string')
         throw new Error('Invalid token');
       const socket = io(
-        `${process.env.REACT_APP_BACKEND_HTTP_URL}/?channel=${decodedToken.channel}`,
+        `${process.env.REACT_APP_BACKEND_WS_URL}/?channel=${decodedToken.channel}`,
         { transports: ['websocket', 'polling', 'flashsocket'] }
       );
       const newAction = {

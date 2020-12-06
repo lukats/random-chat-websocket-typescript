@@ -4,7 +4,7 @@ import { Server as ServerHttps } from 'https';
 import { verifyClient } from './handlers';
 import * as urlParser from 'url-parse';
 import { Server as SocketServer, Socket } from 'socket.io';
-import { getRedisClient, leaveChannel, parseCookies } from '../../utils';
+import { leaveChannel, parseCookies } from '../../utils';
 import { decode } from 'jsonwebtoken';
 
 export const ioMiddlewareWrapper = (
@@ -37,8 +37,7 @@ export const buildSocket = (server: ServerHttp | ServerHttps): SocketServer => {
       const tokenData = decode(
         `${cookies[appEnv.ACCESS_TOKEN_NAME]}`
       ) as Record<string, unknown>;
-      const redis = getRedisClient();
-      await redis.del(tokenData.ref as string);
+      await global.redis.del(tokenData.ref as string);
       await leaveChannel(tokenData.id as string);
     });
   });
