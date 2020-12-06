@@ -29,7 +29,9 @@ export const signupMiddleware = async (
       newUser.passwordCount as number
     );
     await global.redis.set(tokens.tokenUID, tokens.refreshToken);
-    res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken);
+    res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken, {
+      domain: appEnv.FRONT_END_URL
+    });
     const token = await assignChannel(newUser.id);
     return res.status(200).json({ username: newUser.username, token }).end();
   } catch (error) {

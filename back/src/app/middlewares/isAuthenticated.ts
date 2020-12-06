@@ -26,7 +26,9 @@ export const isAuthenticated = async (
       const tokens = await updateTokens(accessToken);
       if (!tokens) throw new Error('No tokens...');
       req.cookies[appEnv.ACCESS_TOKEN_NAME] = tokens.accessToken;
-      res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken);
+      res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken, {
+        domain: appEnv.FRONT_END_URL
+      });
     }
     const isPresent = await isUserPresent(accessToken);
     if (!isPresent) return res.status(401).end();

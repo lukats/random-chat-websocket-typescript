@@ -28,7 +28,9 @@ export const loginMiddleware = async (
       user.passwordCount as number
     );
     await global.redis.set(tokens.tokenUID, tokens.refreshToken);
-    res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken);
+    res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken, {
+      domain: appEnv.FRONT_END_URL
+    });
     const token = await assignChannel(user.id);
     return res.status(200).json({ username: user.username, token }).end();
   } catch (error) {
