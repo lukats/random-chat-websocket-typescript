@@ -1,7 +1,11 @@
 import * as envalid from 'envalid';
 import path = require('path');
 
-const runNodeEnv = ['development', 'production'] as const;
+const runNodeEnv = [
+  'development',
+  'production',
+  'production-dyno-heroku'
+] as const;
 const knownNodeEnv = [...runNodeEnv] as const;
 
 type RunNodeEnv = typeof runNodeEnv[number];

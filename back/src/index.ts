@@ -28,7 +28,10 @@ const main = async (): Promise<void> => {
     });
 
     const server =
-      appEnv.NODE_ENV === 'development' ? serverHTTP(app) : serverHTTPS(app);
+      appEnv.NODE_ENV === 'development' ||
+      appEnv.NODE_ENV === 'production-dyno-heroku'
+        ? serverHTTP(app)
+        : serverHTTPS(app);
 
     const io = buildSocket(server);
 
