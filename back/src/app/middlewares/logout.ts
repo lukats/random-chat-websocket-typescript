@@ -16,6 +16,7 @@ export const logoutMiddleware = async (
     await leaveChannel(tokenData.id as string);
     res.clearCookie(appEnv.ACCESS_TOKEN_NAME, {
       path: '/',
+      secure: appEnv.NODE_ENV !== 'development',
       domain:
         appEnv.NODE_ENV === 'development'
           ? appEnv.FRONT_END_URL.replace('http://', '')

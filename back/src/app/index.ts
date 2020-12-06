@@ -36,14 +36,23 @@ async function buildApp(): Promise<Express.Application | null> {
       contentSecurityPolicy: false
     })
   );
+  app.enable('trust proxy');
   app.use(
     session({
       store: new RedisStore({ client: global.redis }),
       secret: appEnv.SESSION_SECRET,
       resave: false,
       name: appEnv.SESSION_NAME,
+      proxy: appEnv.NODE_ENV !== 'development',
       saveUninitialized: false,
-      cookie: { maxAge: Date.now() + appEnv.JWT_REFRESH_EXP * 1000 }
+      cookie: {
+        secure: appEnv.NODE_ENV !== 'development',
+        maxAge: Date.now() + appEnv.JWT_REFRESH_EXP * 1000,
+        domain:
+          appEnv.NODE_ENV === 'development'
+            ? appEnv.FRONT_END_URL.replace('http://', '')
+            : appEnv.FRONT_END_URL.replace('https://', '')
+      }
     })
   );
 
