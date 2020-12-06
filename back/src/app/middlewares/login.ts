@@ -29,6 +29,7 @@ export const loginMiddleware = async (
     );
     await global.redis.set(tokens.tokenUID, tokens.refreshToken);
     res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken, {
+      path: '/',
       domain:
         appEnv.NODE_ENV === 'development'
           ? appEnv.FRONT_END_URL.replace('http://', '')

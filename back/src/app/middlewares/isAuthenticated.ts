@@ -27,6 +27,7 @@ export const isAuthenticated = async (
       if (!tokens) throw new Error('No tokens...');
       req.cookies[appEnv.ACCESS_TOKEN_NAME] = tokens.accessToken;
       res.cookie(appEnv.ACCESS_TOKEN_NAME, tokens.accessToken, {
+        path: '/',
         domain:
           appEnv.NODE_ENV === 'development'
             ? appEnv.FRONT_END_URL.replace('http://', '')
