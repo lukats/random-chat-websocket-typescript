@@ -30,6 +30,7 @@ export const isAuthenticated = async (
         path: '/',
         secure: appEnv.NODE_ENV !== 'development',
         sameSite: 'none',
+        httpOnly: true,
         domain:
           appEnv.NODE_ENV === 'development'
             ? appEnv.FRONT_END_URL.replace('http://', '')

@@ -49,6 +49,7 @@ async function buildApp(): Promise<Express.Application | null> {
         path: '/',
         secure: appEnv.NODE_ENV !== 'development',
         sameSite: 'none',
+        httpOnly: true,
         maxAge: Date.now() + appEnv.JWT_REFRESH_EXP * 1000,
         domain:
           appEnv.NODE_ENV === 'development'
