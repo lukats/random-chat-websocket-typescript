@@ -46,7 +46,9 @@ async function buildApp(): Promise<Express.Application | null> {
       proxy: appEnv.NODE_ENV !== 'development',
       saveUninitialized: false,
       cookie: {
+        path: '/',
         secure: appEnv.NODE_ENV !== 'development',
+        sameSite: 'none',
         maxAge: Date.now() + appEnv.JWT_REFRESH_EXP * 1000,
         domain:
           appEnv.NODE_ENV === 'development'
